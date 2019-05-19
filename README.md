@@ -1,8 +1,8 @@
 # React form validation
 
-### A simple way to validate your forms in react.
+## A simple way to validate forms in react.
 
-## Example usage
+### Example usage
 
 ### Model your state
 
@@ -25,7 +25,7 @@ const initialValue = {
 
 ### Create a validator
 
-Note: Validator key should be the same in the model that you created above. If it doesn't this will not recognize
+Note: Validator key should be the same in the model that you created above. If it doesn't, it will not recognize the validation.
 
 ```
 const validator = {
@@ -66,5 +66,3 @@ const { state, handleOnChange handleOnSubmit, disable } = useForm(
 Working demo here: https://codesandbox.io/s/silent-rgb-0t9rq
 
 Give me a star if you like it 😃.
-
-Thanks!!!
