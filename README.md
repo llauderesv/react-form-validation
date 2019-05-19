@@ -4,7 +4,7 @@
 
 ## Example usage
 
-### Model your data in json format
+### Model your state
 
 ```
 const initialValue = {
@@ -23,7 +23,7 @@ const initialValue = {
 };
 ```
 
-### Create a validator in json format
+### Create a validator
 
 Note: Validator key should be the same in the model that you created above. If it doesn't this will not recognize
 
@@ -53,7 +53,7 @@ const validator = {
 };
 ```
 
-### Past your data and validator in useForm hooks
+### Past your state and validator in useForm custom hooks
 
 ```
 const { state, handleOnChange handleOnSubmit, disable } = useForm(
