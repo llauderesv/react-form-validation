@@ -116,10 +116,6 @@ function Form() {
     fontSize: '13px',
   };
 
-  const formItemStyle = {
-    // display: 'inline-block',
-  };
-
   return (
     <div>
       <form onSubmit={handleOnSubmit}>
