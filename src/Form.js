@@ -1,68 +1,19 @@
-import React, { useState, useEffect } from 'react';
-
-function useForm(validator, initialValue, callback) {
-  const [state, setState] = useState(initialValue);
-  const [disable, setDisable] = useState(true);
-  const [isDirty, setIsDirty] = useState(false);
-
-  useEffect(() => {
-    if (isDirty) {
-      setDisable(validateState());
-    }
-  }, [state]);
-
-  useEffect(() => {
-    setDisable(validateState());
-  }, []);
-
-  function handleOnChange(event) {
-    setIsDirty(true);
-
-    const name = event.target.name;
-    const value = event.target.value;
-
-    let error = '';
-    if (validator[name].required) {
-      if (!value) {
-        error = 'This is required field.';
-      }
-    }
-
-    if (
-      typeof validator[name].validator === 'object' &&
-      validator[name].validator !== null
-    ) {
-      if (value && !validator[name].validator.regEx.test(value)) {
-        error = validator[name].validator.error;
-      }
-    }
-
-    setState(prevState => ({
-      ...prevState,
-      [name]: { value, error },
-    }));
-  }
-
-  function handleOnSubmit(event) {
-    event.preventDefault();
-
-    callback();
-  }
-
-  function validateState() {
-    return Object.keys(validator).some(key => {
-      const isRequiredField = validator[key].required;
-      const hasValue = state[key].value;
-
-      return (!hasValue && isRequiredField) || state[key].error;
-    });
-  }
-
-  return { state, disable, handleOnChange, handleOnSubmit };
-}
+import React from 'react';
+import useForm from './useForm';
 
 function Form() {
-  const validator = {
+  // Define your state schema
+  const stateSchema = {
+    fname: { value: '', error: '' },
+    lname: { value: '', error: '' },
+    tags: { value: '', error: '' },
+  };
+
+  // Define your validationStateSchema
+
+  // Note: validationStateSchema and stateSchema property
+  // should be the same in-order validation works!
+  const validationStateSchema = {
     fname: {
       required: true,
       validator: {
@@ -71,7 +22,7 @@ function Form() {
       },
     },
     lname: {
-      required: false,
+      required: true,
       validator: {
         regEx: /^[a-zA-Z]+$/,
         error: 'Invalid last name format.',
@@ -86,28 +37,13 @@ function Form() {
     },
   };
 
-  const initialValue = {
-    fname: {
-      value: '',
-      error: '',
-    },
-    lname: {
-      value: '',
-      error: '',
-    },
-    tags: {
-      value: '',
-      error: '',
-    },
-  };
-
-  function onSubmitForm() {
-    alert('Form submitted.');
+  function onSubmitForm(state) {
+    alert(JSON.stringify(state, null, 2));
   }
 
   const { state, handleOnChange, handleOnSubmit, disable } = useForm(
-    validator,
-    initialValue,
+    stateSchema,
+    validationStateSchema,
     onSubmitForm
   );
 
@@ -129,8 +65,9 @@ function Form() {
               onChange={handleOnChange}
             />
           </label>
+          {state.fname.error && <p style={errorStyle}>{state.fname.error}</p>}
         </div>
-        {state.fname.error && <p style={errorStyle}>{state.fname.error}</p>}
+
         <div>
           <label htmlFor="lname">
             Last name:
@@ -141,8 +78,8 @@ function Form() {
               onChange={handleOnChange}
             />
           </label>
+          {state.lname.error && <p style={errorStyle}>{state.lname.error}</p>}
         </div>
-        {state.lname.error && <p style={errorStyle}>{state.lname.error}</p>}
 
         <div>
           <label htmlFor="tags">
@@ -154,8 +91,8 @@ function Form() {
               onChange={handleOnChange}
             />
           </label>
+          {state.tags.error && <p style={errorStyle}>{state.tags.error}</p>}
         </div>
-        {state.tags.error && <p style={errorStyle}>{state.tags.error}</p>}
 
         <input type="submit" name="submit" disabled={disable} />
       </form>

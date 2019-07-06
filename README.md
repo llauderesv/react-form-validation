@@ -25,7 +25,7 @@ const initialValue = {
 
 ### Create a validator
 
-Note: Validator key should be the same in the model that you created above. If it doesn't, it will not recognize the validation.
+Note: Validator key should be the same in the state key that you created above. If it doesn't, it will not recognize the validation.
 
 ```
 const validator = {
