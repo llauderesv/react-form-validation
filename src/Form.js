@@ -10,7 +10,6 @@ function Form() {
   };
 
   // Define your validationStateSchema
-
   // Note: validationStateSchema and stateSchema property
   // should be the same in-order validation works!
   const validationStateSchema = {

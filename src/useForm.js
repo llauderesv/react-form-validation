@@ -66,8 +66,6 @@ function useForm(stateSchema, validationSchema = {}, callback) {
     [validationSchema]
   );
 
-  // function handleOnChange(event) {}
-
   const handleOnSubmit = useCallback(
     event => {
       event.preventDefault();
