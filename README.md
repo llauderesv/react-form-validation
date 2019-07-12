@@ -1,6 +1,4 @@
-# React form validation
-
-## A simple way to validate forms in react.
+# React Form validation using React Hooks
 
 ### Example usage
 
