@@ -1,4 +1,4 @@
-# A simple way to validate your forms in React using Hooks.
+## A simple way to validate your forms in React.
 
 ### Example usage
 
@@ -64,7 +64,7 @@ const stateSchema = {
 
 // Define ValidationScheme
 const validationSchema = {
-  fname: { // Fails because it didn't same with stateSchema key above
+  fname: { // Fail!, because it doesn't match the key in stateSchema.
     required: true
   }
 }
