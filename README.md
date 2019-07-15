@@ -1,18 +1,16 @@
-# React form validation
-
-## A simple way to validate forms in react.
+# A simple way to validate your forms in React using Hooks.
 
 ### Example usage
 
-### Model your state
+### Create your stateSchema
 
 ```
-const initialValue = {
-  fname: {
+const stateSchema = {
+  first_name: {
     value: '',
     error: '',
   },
-  lname: {
+  last_name: {
     value: '',
     error: '',
   },
@@ -23,20 +21,20 @@ const initialValue = {
 };
 ```
 
-### Create a validator
+### Create a validationSchema
 
-Note: Validator key should be the same in the state key that you created above. If it doesn't, it will not recognize the validation.
+Note: Validation Schema key should be the same in the State Schema key that you created. If it doesn't, it will not recognize your validation.
 
 ```
 const validator = {
-  fname: {
+  first_name: {
     required: true,
      validator: {
       regEx: /^[a-zA-Z]+$/,
       error: 'Invalid first name format.',
     },
   },
-  lname: {
+  last_name: {
     required: false,
     validator: {
       regEx: /^[a-zA-Z]+$/,
@@ -53,16 +51,35 @@ const validator = {
 };
 ```
 
-### Past your state and validator in useForm custom hooks
+### This will not work:
 
 ```
-const { state, handleOnChange handleOnSubmit, disable } = useForm(
-    validator,
-    initialValue,
-    onSubmitForm
+// Define StateSchema
+const stateSchema = {
+  first_name: {
+    value: '',
+    error: '',
+  }
+}
+
+// Define ValidationScheme
+const validationSchema = {
+  fname: { // Fails because it didn't same with stateSchema key above
+    required: true
+  }
+}
+
+```
+
+### Passed your stateSchema and validationSchema in useForm hooks.
+
+```
+const { state, handleOnChange handleOnSubmit, disable } =
+   useForm(
+    stateSchema,
+    validationSchema,
+    onSubmitForm // Optional
   );
 ```
 
 Working demo here: https://codesandbox.io/s/silent-rgb-0t9rq
-
-Give me a star if you like it 😃.
