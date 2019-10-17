@@ -1,38 +1,37 @@
 import React from 'react';
 import useForm from '../Hooks/useForm';
-
 import './index.css';
 
 function Form() {
   // Define your state schema
   const stateSchema = {
-    first_name: { value: '', error: '' },
+    first_name: { value: 'Vincent', error: '' },
     last_name: { value: '', error: '' },
     tags: { value: '', error: '' },
   };
 
-  // Define your validationStateSchema
-  // Note: validationStateSchema and stateSchema property
-  // should be the same in-order validation works!
-  const validationStateSchema = {
+  // Create your own validationStateSchema
+  // stateSchema property should be the same in validationStateSchema
+  // in-order a validation to works in your input.
+  const stateValidatorSchema = {
     first_name: {
       required: true,
       validator: {
-        regEx: /^[a-zA-Z]+$/,
+        func: value => /^[a-zA-Z]+$/.test(value),
         error: 'Invalid first name format.',
       },
     },
     last_name: {
       required: true,
       validator: {
-        regEx: /^[a-zA-Z]+$/,
+        func: value => /^[a-zA-Z]+$/.test(value),
         error: 'Invalid last name format.',
       },
     },
     tags: {
       required: true,
       validator: {
-        regEx: /^(,?\w{3,})+$/,
+        func: value => /^(,?\w{3,})+$/.test(value),
         error: 'Invalid tag format.',
       },
     },
@@ -42,12 +41,14 @@ function Form() {
     alert(JSON.stringify(state, null, 2));
   }
 
-  const { state, handleOnChange, handleOnSubmit, disable } = useForm(
+  const { values, errors, handleOnChange, handleOnSubmit, disable } = useForm(
     stateSchema,
-    validationStateSchema,
+    stateValidatorSchema,
     onSubmitForm
   );
 
+  const { first_name, last_name, tags } = values;
+    
   return (
     <form className="my-form" onSubmit={handleOnSubmit}>
       <div className="form-item">
@@ -56,12 +57,12 @@ function Form() {
           <input
             type="text"
             name="first_name"
-            value={state.first_name.value}
+            value={first_name}
             onChange={handleOnChange}
           />
         </label>
-        {state.first_name.error && (
-          <p className="error">{state.first_name.error}</p>
+        {errors.first_name && (
+          <p className="error">{errors.first_name}</p>
         )}
       </div>
 
@@ -71,12 +72,12 @@ function Form() {
           <input
             type="text"
             name="last_name"
-            value={state.last_name.value}
+            value={last_name}
             onChange={handleOnChange}
           />
         </label>
-        {state.last_name.error && (
-          <p className="error">{state.last_name.error}</p>
+        {errors.last_name && (
+          <p className="error">{errors.last_name}</p>
         )}
       </div>
 
@@ -86,11 +87,11 @@ function Form() {
           <input
             type="text"
             name="tags"
-            value={state.tags.value}
+            value={tags}
             onChange={handleOnChange}
           />
         </label>
-        {state.tags.error && <p className="error">{state.tags.error}</p>}
+        {errors.tags && <p className="error">{errors.tags}</p>}
       </div>
 
       <input type="submit" name="submit" disabled={disable} />

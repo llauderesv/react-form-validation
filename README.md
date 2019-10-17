@@ -1,85 +1,74 @@
+# useForm Hooks
+
 ## A simple way to validate your forms in React.
 
 ### Example usage
 
-### Create your stateSchema
+#### Model your stateSchema
+
+Your **stateSchema** an object key value-pair contains the value of an input and the current error if any.
 
 ```
 const stateSchema = {
-  first_name: {
-    value: '',
-    error: '',
-  },
-  last_name: {
-    value: '',
-    error: '',
-  },
-  tags: {
-    value: '',
-    error: '',
-  },
+  first_name: { value: '', error: '', },
+  last_name: { value: '', error: '', },
+  tags: { value: '', error: '',  },
 };
 ```
 
-### Create a validationSchema
+#### Create a validation in your stateSchema
 
-Note: Validation Schema key should be the same in the State Schema key that you created. If it doesn't, it will not recognize your validation.
+**stateValidatorSchema** property should be the same in your stateSchema in-order the validation works. **validator** prop is an object that accepts a **func** value to create your own validation rules. If returns true it will show your error property else it doesn't.
 
 ```
-const validator = {
+const stateValidatorSchema = {
   first_name: {
     required: true,
-     validator: {
-      regEx: /^[a-zA-Z]+$/,
+    validator: {
+      func: value => /^[a-zA-Z]+$/.test(value),
       error: 'Invalid first name format.',
     },
   },
   last_name: {
-    required: false,
+    required: true,
     validator: {
-      regEx: /^[a-zA-Z]+$/,
+      func: value => /^[a-zA-Z]+$/.test(value),
       error: 'Invalid last name format.',
     },
   },
   tags: {
     required: true,
     validator: {
-      regEx: /^(,?\w{3,})+$/,
+      func: value => /^(,?\w{3,})+$/.test(value),
       error: 'Invalid tag format.',
     },
   },
 };
 ```
 
-### This will not work:
+### Passed your stateSchema and stateValidatorSchema in useForm hooks. The 3rd parameter is (optional) a callback function to be called if all inputs is valid.
 
 ```
-// Define StateSchema
+const { values, errors, handleOnChange, handleOnSubmit, disable } = useForm(
+  stateSchema,
+  stateValidatorSchema,
+  onSubmitForm
+);
+```
+
+### Validation doesn't work in the example below:
+
+```
+// Create StateSchema
 const stateSchema = {
-  first_name: {
-    value: '',
-    error: '',
-  }
+  first_name: { value: '', error: '', }
 }
 
-// Define ValidationScheme
-const validationSchema = {
-  fname: { // Fail!, because it doesn't match the key in stateSchema.
-    required: true
-  }
+// Create StateValidatorSchema
+const stateValidatorSchema = {
+  // Fail!, because it doesn't match the key in stateSchema.
+  fname: { required: true }
 }
-
-```
-
-### Passed your stateSchema and validationSchema in useForm hooks.
-
-```
-const { state, handleOnChange handleOnSubmit, disable } =
-   useForm(
-    stateSchema,
-    validationSchema,
-    onSubmitForm // Optional
-  );
 ```
 
 Working demo here: https://codesandbox.io/s/silent-rgb-0t9rq
