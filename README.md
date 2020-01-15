@@ -71,4 +71,4 @@ const stateValidatorSchema = {
 }
 ```
 
-Working demo here: https://codesandbox.io/s/silent-rgb-0t9rq
+Working demo here: https://codesandbox.io/s/react-form-validation-v7k5z
