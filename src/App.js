@@ -9,7 +9,10 @@ function App() {
     <div className="App">
       <div className="App-header">
         <img className="App-logo" src={logo} alt="react-logo" />
-        <p>React Form Validation using React Hooks.</p>
+        <p>React Form Validation</p>
+        <small>
+          A simple and easiest way to validate your forms in React using Hooks.
+        </small>
       </div>
       <Form />
     </div>

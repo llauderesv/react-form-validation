@@ -1,5 +1,5 @@
 import React from 'react';
-import useForm from '../Hooks/useForm';
+import useForm from '../useForm';
 import './index.css';
 
 function Form() {
@@ -41,14 +41,17 @@ function Form() {
     alert(JSON.stringify(state, null, 2));
   }
 
-  const { values, errors, handleOnChange, handleOnSubmit, disable } = useForm(
-    stateSchema,
-    stateValidatorSchema,
-    onSubmitForm
-  );
+  const {
+    values,
+    errors,
+    dirty,
+    handleOnChange,
+    handleOnSubmit,
+    disable,
+  } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
 
   const { first_name, last_name, tags } = values;
-    
+
   return (
     <form className="my-form" onSubmit={handleOnSubmit}>
       <div className="form-item">
@@ -61,7 +64,7 @@ function Form() {
             onChange={handleOnChange}
           />
         </label>
-        {errors.first_name && (
+        {errors.first_name && dirty.first_name && (
           <p className="error">{errors.first_name}</p>
         )}
       </div>
@@ -76,7 +79,7 @@ function Form() {
             onChange={handleOnChange}
           />
         </label>
-        {errors.last_name && (
+        {errors.last_name && dirty.last_name && (
           <p className="error">{errors.last_name}</p>
         )}
       </div>
@@ -91,7 +94,7 @@ function Form() {
             onChange={handleOnChange}
           />
         </label>
-        {errors.tags && <p className="error">{errors.tags}</p>}
+        {errors.tags && dirty.tags && <p className="error">{errors.tags}</p>}
       </div>
 
       <input type="submit" name="submit" disabled={disable} />

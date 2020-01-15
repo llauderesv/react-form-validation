@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from 'react';
 
 const VALUE = 'value';
 const ERROR = 'error';
-
 const REQUIRED_FIELD_ERROR = 'This is required field';
 
 /**
@@ -10,20 +9,8 @@ const REQUIRED_FIELD_ERROR = 'This is required field';
  *
  * @param {object} value
  */
-function isObject(value) {
-  return value !== null && typeof value === 'object';
-}
-
-function getPropValues(stateSchema, prop) {
-  if (!isObject(stateSchema) || !prop) {
-    throw new Error('Invalid Parameter passed.');
-  }
-
-  return Object.keys(stateSchema).reduce((accumulator, curr) => {
-    accumulator[curr] = stateSchema[curr][prop];
-
-    return accumulator;
-  }, {});
+function is_object(value) {
+  return typeof value === 'object' && value !== null;
 }
 
 /**
@@ -31,9 +18,17 @@ function getPropValues(stateSchema, prop) {
  * @param {string} value
  * @param {boolean} isRequired
  */
-function isRequiredField(value, isRequired) {
+function is_required(value, isRequired) {
   if (!value && isRequired) return REQUIRED_FIELD_ERROR;
   return '';
+}
+
+function get_prop_values(stateSchema, prop) {
+  return Object.keys(stateSchema).reduce((accu, curr) => {
+    accu[curr] = !prop ? false : stateSchema[curr][prop];
+
+    return accu;
+  }, {});
 }
 
 /**
@@ -50,8 +45,9 @@ function useForm(
 ) {
   const [state, setStateSchema] = useState(stateSchema);
 
-  const [values, setValues] = useState(getPropValues(state, VALUE));
-  const [errors, setErrors] = useState(getPropValues(state, ERROR));
+  const [values, setValues] = useState(get_prop_values(state, VALUE));
+  const [errors, setErrors] = useState(get_prop_values(state, ERROR));
+  const [dirty, setDirty] = useState(get_prop_values(state));
 
   const [disable, setDisable] = useState(true);
   const [isDirty, setIsDirty] = useState(false);
@@ -60,6 +56,7 @@ function useForm(
   useEffect(() => {
     setStateSchema(stateSchema);
     setDisable(true); // Disable button in initial render.
+    setInitialErrorState();
   }, []); // eslint-disable-line
 
   // For every changed in our state this will be fired
@@ -69,6 +66,45 @@ function useForm(
       setDisable(validateErrorState());
     }
   }, [errors, isDirty]); // eslint-disable-line
+
+  // Validate fields in forms
+  const validateFormFields = useCallback(
+    (name, value) => {
+      const validator = stateValidatorSchema;
+      // Making sure that stateValidatorSchema name is same in
+      // stateSchema
+      if (!validator[name]) return;
+
+      const field = validator[name];
+
+      let error = '';
+      error = is_required(value, field.required);
+
+      if (is_object(field['validator']) && error === '') {
+        const fieldValidator = field['validator'];
+
+        // Test the function callback if the value is meet the criteria
+        const testFunc = fieldValidator['func'];
+        if (!testFunc(value, values)) {
+          error = fieldValidator['error'];
+        }
+      }
+
+      return error;
+    },
+    [stateValidatorSchema, values]
+  );
+
+  // Set Initial Error State
+  // When hooks was first rendered...
+  const setInitialErrorState = useCallback(() => {
+    Object.keys(errors).map(name =>
+      setErrors(prevState => ({
+        ...prevState,
+        [name]: validateFormFields(name, values[name]),
+      }))
+    );
+  }, [errors, values, validateFormFields]);
 
   // Used to disable submit button if there's a value in errors
   // or the required field in state has no value.
@@ -87,34 +123,17 @@ function useForm(
       const name = event.target.name;
       const value = event.target.value;
 
-      const _validator = stateValidatorSchema;
-
-      // Making sure that stateValidatorSchema name is same in 
-      // stateSchema
-      if (!_validator[name]) return;
-
-      const _field = _validator[name];
-
-      let error = '';
-      error = isRequiredField(value, _field.required);
-
-      // Prevent running this function if the value is required field
-      if (error === '' && isObject(_field['validator'])) {
-        const _fieldValidator = _field['validator'];
-
-        // Test the function callback if the value is meet the criteria
-        const testFunc = _fieldValidator['func'];
-        if (!testFunc(value, values)) {
-          error = _fieldValidator['error'];
-        }
-      }
+      const error = validateFormFields(name, value);
 
       setValues(prevState => ({ ...prevState, [name]: value }));
       setErrors(prevState => ({ ...prevState, [name]: error }));
+      setDirty(prevState => ({ ...prevState, [name]: true }));
     },
-    [stateValidatorSchema, values]
+    [validateFormFields]
   );
 
+  // Use this callback function to safely submit the form
+  // without any errors in state...
   const handleOnSubmit = useCallback(
     event => {
       event.preventDefault();
@@ -136,6 +155,8 @@ function useForm(
     disable,
     setValues,
     setErrors,
+    dirty,
+    validateErrorState,
   };
 }
 
