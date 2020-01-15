@@ -56,19 +56,8 @@ const { values, errors, handleOnChange, handleOnSubmit, disable } = useForm(
 );
 ```
 
-### Validation doesn't work in the example below:
-
-```
-// Create StateSchema
-const stateSchema = {
-  first_name: { value: '', error: '', }
-}
-
-// Create StateValidatorSchema
-const stateValidatorSchema = {
-  // Fail!, because it doesn't match the key in stateSchema.
-  fname: { required: true }
-}
-```
-
 Working demo here: https://codesandbox.io/s/react-form-validation-v7k5z
+
+Feel free to contribute in this project.
+
+This project is under [MIT License](https://github.com/llauderesv/react-form-validation/blob/master/LICENSE)
