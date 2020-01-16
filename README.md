@@ -1,4 +1,4 @@
-# useForm Hooks
+# React useForm Hooks
 
 ## A simple and easiest way to validate your forms in React.
 
@@ -6,7 +6,7 @@
 
 #### Model your stateSchema
 
-Your **stateSchema** an object key value-pair contains the value of an input and the current error if any.
+Your **stateSchema** is an object key value-pair contains the value of an input and the current error if any.
 
 ```
 const stateSchema = {
@@ -16,9 +16,9 @@ const stateSchema = {
 };
 ```
 
-#### Create a validation your stateSchema
+#### Create a validation in your stateSchema
 
-**stateValidatorSchema** property should be the same in your stateSchema in-order validation works. **validator** prop is an object that accepts a **func** value to create your own validation rules. It returns boolean to indicate your validation if passed or failed.
+Property should be the same in your stateSchema in-order validation works. required prop is a optional to indicate that fields is required. **validator** prop is an object that accepts a **func** (functions) to create your own validation rules. It returns boolean to indicate your validation whether if passed or failed.
 
 ```
 const stateValidatorSchema = {
@@ -46,19 +46,19 @@ const stateValidatorSchema = {
 };
 ```
 
-### Passed your stateSchema and stateValidatorSchema in useForm hooks. The 3rd parameter is (optional) a callback function to be called if all inputs is valid.
+Passed your stateSchema and stateValidatorSchema in useForm hooks. The 3rd parameter is (optional) a callback function to be called when you submit your form if all fields is valid.
 
 ```
-const { values, errors, handleOnChange, handleOnSubmit, disable } = useForm(
-  stateSchema,
-  stateValidatorSchema,
+const { 
+    values, errors, handleOnChange, handleOnSubmit, disable 
+  } = useForm(stateSchema, stateValidatorSchema,
   onSubmitForm
 );
 ```
 
 # Demo
 
-Working demo here: https://codesandbox.io/s/react-form-validation-v7k5z
+Working demo [here](https://codesandbox.io/s/react-form-validation-v7k5z)
 
 # Contributions
 
