@@ -1,8 +1,8 @@
 # useForm Hooks
 
-## A simple way to validate your forms in React.
+## A simple and easiest way to validate your forms in React.
 
-### Example usage
+## Example usage
 
 #### Model your stateSchema
 
@@ -16,9 +16,9 @@ const stateSchema = {
 };
 ```
 
-#### Create a validation in your stateSchema
+#### Create a validation your stateSchema
 
-**stateValidatorSchema** property should be the same in your stateSchema in-order the validation works. **validator** prop is an object that accepts a **func** value to create your own validation rules. If returns true it will show your error property else it doesn't.
+**stateValidatorSchema** property should be the same in your stateSchema in-order validation works. **validator** prop is an object that accepts a **func** value to create your own validation rules. It returns boolean to indicate your validation if passed or failed.
 
 ```
 const stateValidatorSchema = {
@@ -56,8 +56,14 @@ const { values, errors, handleOnChange, handleOnSubmit, disable } = useForm(
 );
 ```
 
+# Demo
+
 Working demo here: https://codesandbox.io/s/react-form-validation-v7k5z
+
+# Contributions
 
 Feel free to contribute in this project.
 
-This project is under [MIT License](https://github.com/llauderesv/react-form-validation/blob/master/LICENSE)
+# License
+
+This project is under [MIT License](https://github.com/llauderesv/react-form-validation/blob/master/LICENSE).

@@ -1,41 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
-
-const VALUE = 'value';
-const ERROR = 'error';
-const REQUIRED_FIELD_ERROR = 'This is required field';
+import { get_prop_values, is_object, is_required, VALUE, ERROR } from './utils';
 
 /**
- * Determines a value if it's an object
+ * useForm hooks to handle your validation in your forms
  *
- * @param {object} value
- */
-function is_object(value) {
-  return typeof value === 'object' && value !== null;
-}
-
-/**
- *
- * @param {string} value
- * @param {boolean} isRequired
- */
-function is_required(value, isRequired) {
-  if (!value && isRequired) return REQUIRED_FIELD_ERROR;
-  return '';
-}
-
-function get_prop_values(stateSchema, prop) {
-  return Object.keys(stateSchema).reduce((accu, curr) => {
-    accu[curr] = !prop ? false : stateSchema[curr][prop];
-
-    return accu;
-  }, {});
-}
-
-/**
- * Custom hooks to validate your Form...
- *
- * @param {object} stateSchema model you stateSchema.
- * @param {object} stateValidatorSchema model your validation.
+ * @param {object} stateSchema stateSchema.
+ * @param {object} stateValidatorSchema stateSchemaValidation to validate your forms in react.
  * @param {function} submitFormCallback function to be execute during form submission.
  */
 function useForm(
@@ -54,8 +24,8 @@ function useForm(
 
   // Get a local copy of stateSchema
   useEffect(() => {
-    setStateSchema(stateSchema);
     setDisable(true); // Disable button in initial render.
+    setStateSchema(stateSchema);
     setInitialErrorState();
   }, []); // eslint-disable-line
 
@@ -68,7 +38,7 @@ function useForm(
   }, [errors, isDirty]); // eslint-disable-line
 
   // Validate fields in forms
-  const validateFormFields = useCallback(
+  const validateField = useCallback(
     (name, value) => {
       const validator = stateValidatorSchema;
       // Making sure that stateValidatorSchema name is same in
@@ -81,12 +51,11 @@ function useForm(
       error = is_required(value, field.required);
 
       if (is_object(field['validator']) && error === '') {
-        const fieldValidator = field['validator'];
+        const validateFieldByCallback = field['validator'];
 
         // Test the function callback if the value is meet the criteria
-        const testFunc = fieldValidator['func'];
-        if (!testFunc(value, values)) {
-          error = fieldValidator['error'];
+        if (!validateFieldByCallback['func'](value, values)) {
+          error = validateFieldByCallback['error'];
         }
       }
 
@@ -101,10 +70,10 @@ function useForm(
     Object.keys(errors).map(name =>
       setErrors(prevState => ({
         ...prevState,
-        [name]: validateFormFields(name, values[name]),
+        [name]: validateField(name, values[name]),
       }))
     );
-  }, [errors, values, validateFormFields]);
+  }, [errors, values, validateField]);
 
   // Used to disable submit button if there's a value in errors
   // or the required field in state has no value.
@@ -123,13 +92,13 @@ function useForm(
       const name = event.target.name;
       const value = event.target.value;
 
-      const error = validateFormFields(name, value);
+      const error = validateField(name, value);
 
       setValues(prevState => ({ ...prevState, [name]: value }));
       setErrors(prevState => ({ ...prevState, [name]: error }));
       setDirty(prevState => ({ ...prevState, [name]: true }));
     },
-    [validateFormFields]
+    [validateField]
   );
 
   // Use this callback function to safely submit the form
