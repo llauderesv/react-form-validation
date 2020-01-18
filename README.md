@@ -1,10 +1,10 @@
 # React useForm Hooks
 
-## A simple and easiest way to validate your forms in React.
+A simple and declarative way to validate your forms in React.
 
-## Example usage
+# Example usage
 
-#### Model your stateSchema
+Create your stateSchema
 
 Your **stateSchema** is an object key value-pair contains the value of an input and the current error if any.
 
@@ -16,9 +16,9 @@ const stateSchema = {
 };
 ```
 
-#### Create a validation in your stateSchema
+Create a validation in your stateSchema
 
-Property should be the same in your stateSchema in-order validation works. required prop is a optional to indicate that fields is required. **validator** prop is an object that accepts a **func** (functions) to create your own validation rules. It returns boolean to indicate your validation whether if passed or failed.
+Property should be the same in your stateSchema in-order validation works. validator prop accepts a **func** that you can be used to validate your state via regex.
 
 ```
 const stateValidatorSchema = {
@@ -60,10 +60,10 @@ const {
 
 Working demo [here](https://codesandbox.io/s/react-form-validation-v7k5z)
 
-# Contributions
+# Contributing
 
 Feel free to contribute in this project.
 
-# License
+## License
 
 This project is under [MIT License](https://github.com/llauderesv/react-form-validation/blob/master/LICENSE).
