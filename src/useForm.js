@@ -1,3 +1,9 @@
+/* 
+  TODO: 
+    - Add typescript for intellisense and validation
+    - Publish to npm
+    - Remove too much boilerplate
+*/
 import { useState, useEffect, useCallback } from 'react';
 import { get_prop_values, is_object, is_required, VALUE, ERROR } from './utils';
 
@@ -94,9 +100,9 @@ function useForm(
 
       const error = validateField(name, value);
 
+      setDirty(prevState => ({ ...prevState, [name]: true }));
       setValues(prevState => ({ ...prevState, [name]: value }));
       setErrors(prevState => ({ ...prevState, [name]: error }));
-      setDirty(prevState => ({ ...prevState, [name]: true }));
     },
     [validateField]
   );
@@ -117,14 +123,14 @@ function useForm(
   );
 
   return {
-    handleOnChange,
-    handleOnSubmit,
+    dirty,
     values,
     errors,
     disable,
     setValues,
     setErrors,
-    dirty,
+    handleOnChange,
+    handleOnSubmit,
     validateErrorState,
   };
 }
