@@ -1,9 +1,3 @@
-/* 
-  TODO: 
-    - Add typescript for intellisense and validation
-    - Publish to npm
-    - Remove too much boilerplate
-*/
 import { useState, useEffect, useCallback } from 'react';
 import { get_prop_values, is_object, is_required, VALUE, ERROR } from './utils';
 
@@ -42,6 +36,14 @@ function useForm(
       setDisable(validateErrorState());
     }
   }, [errors, isDirty]); // eslint-disable-line
+
+  // Set a value in a specific field
+  const setFieldValue = ({ name, value }) =>
+    setValues(prevState => ({ ...prevState, [name]: value }));
+
+  // Set an error in a specific field
+  const setFieldError = ({ name, error }) =>
+    setErrors(prevState => ({ ...prevState, [name]: error }));
 
   // Validate fields in forms
   const validateField = useCallback(
@@ -90,23 +92,6 @@ function useForm(
     [errors]
   );
 
-  // Event handler for handling changes in input.
-  const handleOnChange = useCallback(
-    event => {
-      setIsDirty(true);
-
-      const name = event.target.name;
-      const value = event.target.value;
-
-      const error = validateField(name, value);
-
-      setDirty(prevState => ({ ...prevState, [name]: true }));
-      setValues(prevState => ({ ...prevState, [name]: value }));
-      setErrors(prevState => ({ ...prevState, [name]: error }));
-    },
-    [validateField]
-  );
-
   // Use this callback function to safely submit the form
   // without any errors in state...
   const handleOnSubmit = useCallback(
@@ -122,13 +107,30 @@ function useForm(
     [validateErrorState, submitFormCallback, values]
   );
 
+  // Event handler for handling changes in input.
+  const handleOnChange = useCallback(
+    event => {
+      setIsDirty(true);
+
+      const name = event.target.name;
+      const value = event.target.value;
+
+      const error = validateField(name, value);
+
+      setDirty(prevState => ({ ...prevState, [name]: true }));
+      setFieldValue({ name, value });
+      setFieldError({ name, error });
+    },
+    [validateField]
+  );
+
   return {
     dirty,
     values,
     errors,
     disable,
-    setValues,
-    setErrors,
+    setFieldValue,
+    setFieldError,
     handleOnChange,
     handleOnSubmit,
     validateErrorState,
