@@ -21,7 +21,6 @@ export function is_required(value, isRequired) {
   return '';
 }
 
-
 export function get_prop_values(stateSchema, prop) {
   return Object.keys(stateSchema).reduce((field, key) => {
     field[key] = !prop ? false : stateSchema[key][prop];

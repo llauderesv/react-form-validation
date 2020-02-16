@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import useForm from '../useForm';
 import './index.css';
 
@@ -9,6 +9,8 @@ function Form() {
     last_name: { value: '', error: '' },
     tags: { value: '', error: '' },
   };
+
+  const delay = () => new Promise(resolve => setTimeout(resolve, 5000));
 
   // Create your own validationStateSchema
   // stateSchema property should be the same in validationStateSchema
@@ -47,8 +49,23 @@ function Form() {
     dirty,
     handleOnChange,
     handleOnSubmit,
+    setFieldError,
+    setFieldValue,
+    setStateSchema,
     disable,
   } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
+
+  useEffect(() => {
+    delay().then(() => {
+      setStateSchema({
+        first_name: { value: 'Denise', error: '' },
+        last_name: { value: '', error: '' },
+        tags: { value: '', error: '' },
+      });
+      // setFieldValue({ name: 'first_name', value: 'Hello' });
+      // setFieldError({ name: 'first_name', error: 'Vince' });
+    });
+  }, []);
 
   const { first_name, last_name, tags } = values;
 
@@ -64,9 +81,7 @@ function Form() {
             onChange={handleOnChange}
           />
         </label>
-        {errors.first_name && dirty.first_name && (
-          <p className="error">{errors.first_name}</p>
-        )}
+        {errors.first_name && <p className="error">{errors.first_name}</p>}
       </div>
 
       <div className="form-item">

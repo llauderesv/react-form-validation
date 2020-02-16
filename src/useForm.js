@@ -24,10 +24,17 @@ function useForm(
 
   // Get a local copy of stateSchema
   useEffect(() => {
-    setDisable(true); // Disable button in initial render.
     setStateSchema(stateSchema);
+    setDisable(true); // Disable button in initial render.
     setInitialErrorState();
   }, []); // eslint-disable-line
+
+  // If state schema changes update all fields
+  useEffect(() => {
+    setValues(get_prop_values(state, VALUE));
+    setErrors(get_prop_values(state, ERROR));
+    setDirty(get_prop_values(state, true));
+  }, [state]);
 
   // For every changed in our state this will be fired
   // To be able to disable the button
@@ -37,11 +44,13 @@ function useForm(
     }
   }, [errors, isDirty]); // eslint-disable-line
 
-  // Set a value in a specific field
-  const setFieldValue = ({ name, value }) =>
+  // Set a value of a specific field
+  const setFieldValue = ({ name, value }) => {
     setValues(prevState => ({ ...prevState, [name]: value }));
+    setDirty(prevState => ({ ...prevState, [name]: true }));
+  };
 
-  // Set an error in a specific field
+  // Set an error of a specific field
   const setFieldError = ({ name, error }) =>
     setErrors(prevState => ({ ...prevState, [name]: error }));
 
@@ -76,10 +85,7 @@ function useForm(
   // When hooks was first rendered...
   const setInitialErrorState = useCallback(() => {
     Object.keys(errors).map(name =>
-      setErrors(prevState => ({
-        ...prevState,
-        [name]: validateField(name, values[name]),
-      }))
+      setFieldError({ name, error: validateField(name, values[name]) })
     );
   }, [errors, values, validateField]);
 
@@ -117,7 +123,6 @@ function useForm(
 
       const error = validateField(name, value);
 
-      setDirty(prevState => ({ ...prevState, [name]: true }));
       setFieldValue({ name, value });
       setFieldError({ name, error });
     },
@@ -129,6 +134,7 @@ function useForm(
     values,
     errors,
     disable,
+    setStateSchema,
     setFieldValue,
     setFieldError,
     handleOnChange,
