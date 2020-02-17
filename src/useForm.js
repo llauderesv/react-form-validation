@@ -17,7 +17,7 @@ function useForm(
 
   const [values, setValues] = useState(get_prop_values(state, VALUE));
   const [errors, setErrors] = useState(get_prop_values(state, ERROR));
-  const [dirty, setDirty] = useState(get_prop_values(state));
+  const [dirty, setDirty] = useState(get_prop_values(state, false));
 
   const [disable, setDisable] = useState(true);
   const [isDirty, setIsDirty] = useState(false);
@@ -29,12 +29,18 @@ function useForm(
     setInitialErrorState();
   }, []); // eslint-disable-line
 
-  // If state schema changes update all fields
+  // Set a brand new field values and errors 
+  // If stateSchema changes
   useEffect(() => {
-    setValues(get_prop_values(state, VALUE));
-    setErrors(get_prop_values(state, ERROR));
-    setDirty(get_prop_values(state, true));
-  }, [state]);
+    const values = get_prop_values(state, VALUE);
+    setValues(values);
+    setErrors(
+      Object.keys(values).reduce((accu, curr) => {
+        accu[curr] = validateField(curr, values[curr]);
+        return accu;
+      }, {})
+    );
+  }, [state]); // eslint-disable-line
 
   // For every changed in our state this will be fired
   // To be able to disable the button

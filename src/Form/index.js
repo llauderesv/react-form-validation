@@ -10,7 +10,7 @@ function Form() {
     tags: { value: '', error: '' },
   };
 
-  const delay = () => new Promise(resolve => setTimeout(resolve, 5000));
+  const delay = () => new Promise(resolve => setTimeout(resolve, 3000));
 
   // Create your own validationStateSchema
   // stateSchema property should be the same in validationStateSchema
@@ -58,8 +58,8 @@ function Form() {
   useEffect(() => {
     delay().then(() => {
       setStateSchema({
-        first_name: { value: 'Denise', error: '' },
-        last_name: { value: '', error: '' },
+        first_name: { value: 'Ellie', error: '' },
+        last_name: { value: 'Eilish', error: '' },
         tags: { value: '', error: '' },
       });
       // setFieldValue({ name: 'first_name', value: 'Hello' });
@@ -81,7 +81,9 @@ function Form() {
             onChange={handleOnChange}
           />
         </label>
-        {errors.first_name && <p className="error">{errors.first_name}</p>}
+        {errors.first_name && dirty.first_name && (
+          <p className="error">{errors.first_name}</p>
+        )}
       </div>
 
       <div className="form-item">
