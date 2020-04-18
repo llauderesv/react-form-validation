@@ -1,5 +1,5 @@
 import React from 'react';
-import Form from './Form';
+import Form from './example/Form';
 
 import logo from './logo.svg';
 import './App.css';

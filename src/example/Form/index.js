@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import useForm from '../useForm';
+import useForm from '../../lib';
 import './index.css';
 
 function Form() {
@@ -10,7 +10,7 @@ function Form() {
     tags: { value: '', error: '' },
   };
 
-  const delay = () => new Promise(resolve => setTimeout(resolve, 3000));
+  const delay = () => new Promise((resolve) => setTimeout(resolve, 3000));
 
   // Create your own validationStateSchema
   // stateSchema property should be the same in validationStateSchema
@@ -19,21 +19,21 @@ function Form() {
     first_name: {
       required: true,
       validator: {
-        func: value => /^[a-zA-Z]+$/.test(value),
+        func: (value) => /^[a-zA-Z]+$/.test(value),
         error: 'Invalid first name format.',
       },
     },
     last_name: {
       required: true,
       validator: {
-        func: value => /^[a-zA-Z]+$/.test(value),
+        func: (value) => /^[a-zA-Z]+$/.test(value),
         error: 'Invalid last name format.',
       },
     },
     tags: {
-      required: true,
+      // required: true,
       validator: {
-        func: value => /^(,?\w{3,})+$/.test(value),
+        func: (value) => /^(,?\w{3,})+$/.test(value),
         error: 'Invalid tag format.',
       },
     },
