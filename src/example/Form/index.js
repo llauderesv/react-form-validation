@@ -10,8 +10,6 @@ function Form() {
     tags: { value: '', error: '' },
   };
 
-  const delay = () => new Promise((resolve) => setTimeout(resolve, 3000));
-
   // Create your own validationStateSchema
   // stateSchema property should be the same in validationStateSchema
   // in-order a validation to works in your input.
@@ -49,8 +47,6 @@ function Form() {
     dirty,
     handleOnChange,
     handleOnSubmit,
-    setFieldError,
-    setFieldValue,
     setStateSchema,
     disable,
   } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);

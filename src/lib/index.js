@@ -14,6 +14,7 @@ function useForm(
   submitFormCallback
 ) {
   const [state, setStateSchema] = useState(stateSchema);
+  const [validatorSchema, setValidatorSchema] = useState(stateValidatorSchema);
 
   const [values, setValues] = useState(get_prop_values(state, VALUE));
   const [errors, setErrors] = useState(get_prop_values(state, ERROR));
@@ -45,6 +46,15 @@ function useForm(
     setErrors(errors);
   }, [state]); // eslint-disable-line
 
+  useEffect(() => {
+    const errors = Object.keys(values).reduce((accu, curr) => {
+      accu[curr] = validateField(curr, values[curr]);
+      return accu;
+    }, {});
+
+    setErrors(errors);
+  }, [validatorSchema]); // eslint-disable-line
+
   // For every changed in our state this will be fired
   // To be able to disable the button
   useEffect(() => {
@@ -67,7 +77,7 @@ function useForm(
   // Function used to validate form fields
   const validateField = useCallback(
     (name, value) => {
-      const fieldValidator = stateValidatorSchema[name];
+      const fieldValidator = validatorSchema[name];
       // Making sure that stateValidatorSchema name is same in
       // stateSchema
       if (!fieldValidator) {
@@ -93,7 +103,7 @@ function useForm(
 
       return error;
     },
-    [stateValidatorSchema, values]
+    [validatorSchema, values]
   );
 
   // Set Initial Error State
@@ -148,6 +158,7 @@ function useForm(
     errors,
     disable,
     setStateSchema,
+    setValidatorSchema,
     setFieldValue,
     setFieldError,
     handleOnChange,
