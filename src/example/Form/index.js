@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import useForm from '../../lib';
 import './index.css';
 
@@ -37,7 +37,7 @@ function Form() {
     },
   };
 
-  function onSubmitForm(state) {
+  const onSubmitForm = (state) => {
     alert(JSON.stringify(state, null, 2));
   }
 
@@ -47,21 +47,8 @@ function Form() {
     dirty,
     handleOnChange,
     handleOnSubmit,
-    setStateSchema,
     disable,
   } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
-
-  useEffect(() => {
-    delay().then(() => {
-      setStateSchema({
-        first_name: { value: 'Ellie', error: '' },
-        last_name: { value: 'Eilish', error: '' },
-        tags: { value: '', error: '' },
-      });
-      // setFieldValue({ name: 'first_name', value: 'Hello' });
-      // setFieldError({ name: 'first_name', error: 'Vince' });
-    });
-  }, []);
 
   const { first_name, last_name, tags } = values;
 
