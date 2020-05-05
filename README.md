@@ -16,9 +16,9 @@ const stateSchema = {
 };
 ```
 
-Create a validation in your stateSchema
+Create validation in your stateSchema
 
-Property should be the same in your stateSchema in-order validation works. validator prop accepts a **func** that you can be used to validate your state via regex.
+Property should be the same in your stateSchema in-order validation works. **validator** prop accepts a **func** that you can be use to validate your state via regEx.
 
 ```
 const stateValidatorSchema = {
@@ -46,19 +46,21 @@ const stateValidatorSchema = {
 };
 ```
 
-Passed your stateSchema and stateValidatorSchema in useForm hooks. The 3rd parameter is (optional) a callback function to be called when you submit your form if all fields is valid.
+Passed your stateSchema and stateValidatorSchema in useForm hooks. 3rd parameter is (optional) callback function to be called when you submit your form if all fields is valid.
 
 ```
 const { 
-    values, errors, handleOnChange, handleOnSubmit, disable 
-  } = useForm(stateSchema, stateValidatorSchema,
-  onSubmitForm
-);
+   values, 
+   errors, 
+   handleOnChange, 
+   handleOnSubmit, 
+   disable 
+ } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
 ```
 
 # Demo
 
-Working demo [here](https://codesandbox.io/s/react-form-validation-v7k5z)
+Working demo [here](https://codesandbox.io/s/react-form-validation-v7k5z).
 
 # Contributing
 
