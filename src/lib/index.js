@@ -46,6 +46,7 @@ function useForm(
     setErrors(errors);
   }, [state]); // eslint-disable-line
 
+  // Run validation if validatorSchema was already set or has change...
   useEffect(() => {
     const errors = Object.keys(values).reduce((accu, curr) => {
       accu[curr] = validateField(curr, values[curr]);
@@ -86,6 +87,9 @@ function useForm(
 
       let error = '';
       error = is_required(value, fieldValidator['required']);
+      if (error) {
+        return error;
+      }
 
       // Bail out if field is not required and no value set.
       // To prevent proceeding to validator function
@@ -94,10 +98,21 @@ function useForm(
       }
 
       // Run custom validator function
-      if (error === '' && is_object(fieldValidator['validator'])) {
+      if (!error && is_object(fieldValidator['validator'])) {
         // Test the function callback if the value is meet the criteria
         if (!fieldValidator['validator']['func'](value, values)) {
           error = fieldValidator['validator']['error'];
+        }
+      }
+
+      if (!error && is_object(fieldValidator['compare'])) {
+        const { to, error: errorMessage } = fieldValidator.compare;
+        if (to && errorMessage && values[to] !== '') {
+          if (value !== values[to]) {
+            error = errorMessage;
+          } else {
+            setFieldError({ name: to, error: '' });
+          }
         }
       }
 

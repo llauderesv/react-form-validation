@@ -1,3 +1,9 @@
+.my-form {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 .my-form p {
   margin: 0;
 }
