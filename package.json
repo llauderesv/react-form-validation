@@ -1,15 +1,25 @@
 {
-  "name": "test-app",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
+  "name": "react-useform-validation",
+  "version": "1.0.0",
+  "private": false,
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/llauderesv/react-form-validation"
+  },
+  "dependencies": {},
+  "peerDependencies": {
     "react": "16.10.2",
-    "react-dom": "16.10.2",
-    "react-scripts": "3.3.0"
+    "react-dom": "16.10.2"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "rm -rf dist && NODE_ENV=production npx babel src/lib --out-dir dist --copy-files --ignore __tests__,spec.js,test.js,__snapshots__",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -29,7 +39,12 @@
     ]
   },
   "devDependencies": {
-    "lodash": "4.17.14",
-    "lodash.template": "4.5.0"
+    "@babel/cli": "^7.12.8",
+    "@babel/core": "^7.12.9",
+    "@types/react": "^17.0.0",
+    "babel-preset-react": "^6.24.1",
+    "lodash": "^4.17.20",
+    "lodash.template": "4.5.0",
+    "react-scripts": "3.3.0"
   }
 }
