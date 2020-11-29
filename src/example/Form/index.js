@@ -1,5 +1,5 @@
 import React from 'react';
-import useForm from '../../lib';
+import useForm from 'lib';
 import './index.css';
 
 function Form() {
@@ -10,50 +10,6 @@ function Form() {
     tags: { value: '', error: '' },
     password: { value: '', error: '' },
     confirm_password: { value: '', error: '' },
-  };
-
-  // Create your own validationStateSchema
-  // stateSchema property should be the same in validationStateSchema
-  // in-order a validation to works in your input.
-  const stateValidatorSchema = {
-    first_name: {
-      required: true,
-      validator: {
-        func: (value) => /^[a-zA-Z]+$/.test(value),
-        error: 'Invalid first name format.',
-      },
-    },
-    last_name: {
-      required: true,
-      validator: {
-        func: (value) => /^[a-zA-Z]+$/.test(value),
-        error: 'Invalid last name format.',
-      },
-    },
-    tags: {
-      validator: {
-        func: (value) => /^(,?\w{3,})+$/.test(value),
-        error: 'Invalid tag format.',
-      },
-    },
-    password: {
-      required: true,
-      compare: {
-        to: 'confirm_password',
-        error: 'Password does not match to confirm password',
-      },
-      validator: {
-        func: (value) => /^[a-zA-Z]+$/.test(value),
-        error: 'Password does not meet the requirement',
-      },
-    },
-    confirm_password: {
-      required: true,
-      validator: {
-        func: (value, values) => value === values.password,
-        error: 'Confirm Password does not match to Password',
-      },
-    },
   };
 
   const onSubmitForm = (state) => {
@@ -67,7 +23,50 @@ function Form() {
     handleOnChange,
     handleOnSubmit,
     disable,
-  } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
+  } = useForm(
+    stateSchema,
+    {
+      first_name: {
+        required: true,
+        validator: {
+          func: (value) => /^[a-zA-Z]+$/.test(value),
+          error: 'Invalid first name format.',
+        },
+      },
+      last_name: {
+        required: true,
+        validator: {
+          func: (value) => /^[a-zA-Z]+$/.test(value),
+          error: 'Invalid last name format.',
+        },
+      },
+      tags: {
+        validator: {
+          func: (value) => /^(,?\w{3,})+$/.test(value),
+          error: 'Invalid tag format.',
+        },
+      },
+      confirm_password: {
+        required: true,
+        validator: {
+          func: (value, values) => value === values.password,
+          error: 'Confirm Password does not match to Password',
+        },
+      },
+      password: {
+        required: true,
+        compare: {
+          to: 'confirm_password',
+          error: 'Password does not match to confirm password',
+        },
+        validator: {
+          func: (value) => /^[a-zA-Z]+$/.test(value),
+          error: 'Password does not meet the requirement',
+        },
+      },
+    },
+    onSubmitForm
+  );
 
   const { first_name, last_name, tags, password, confirm_password } = values;
 
