@@ -43,7 +43,7 @@
     "@babel/core": "^7.12.9",
     "@types/react": "^17.0.0",
     "babel-preset-react": "^6.24.1",
-    "lodash": "^4.17.20",
+    "lodash": "^4.17.21",
     "lodash.template": "4.5.0",
     "react-scripts": "3.3.0"
   }
